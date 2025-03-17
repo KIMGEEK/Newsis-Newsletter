@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import PageHome from "@/views/PageHome.vue";
+import PageHome from "../views/PageHome.vue";
 
 const routes = [
   {
@@ -19,7 +19,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory('/'),
   routes,
 });
 
