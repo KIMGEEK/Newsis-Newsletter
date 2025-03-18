@@ -6,18 +6,14 @@
       <table class="w3-table-all">
         <thead>
         <tr>
-          <th>No</th>
           <th>제목</th>
           <th>내용</th>
-          <th>등록일시</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="(row, idx) in list" :key="idx">
-          <td>{{ row.idx }}</td>
           <td><a v-on:click="fnView(`${row.idx}`)">{{ row.title }}</a></td>
           <td>{{ row.text }}</td>
-          <td>{{ row.created_at }}</td>
         </tr>
         </tbody>
       </table>
@@ -43,11 +39,15 @@
   </template>
   
   <script>
+  import News from '../../assets/프론트엔드.json';
+
+  console.log(News);
   export default {
     data() { //변수생성
       return {
         requestBody: {}, //리스트 페이지 데이터전송
         list: {}, //리스트 데이터
+        News: [],
         no: '', //게시판 숫자처리
         paging: {
           block: 0,
@@ -75,17 +75,15 @@
       }
     },
     mounted() {
-      this.fnGetList()
+      this.fnGetList();
     },
     methods: {
       fnGetList() {
         this.list = [
-          {
-            idx: 1,
-            title: '제목1',
-            text: '내용1',
-            created_at: '2025-03-18 10:00:00'
-          }
+        News[0],
+        News[1],
+        News[2],
+        News[3]
         ]
       }
       }
