@@ -13,7 +13,7 @@
         <tbody>
         <tr v-for="(row, idx) in list" :key="idx">
           <td><a v-on:click="fnView(`${row.idx}`)">{{ row.title }}</a></td>
-          <td>{{ row.text }}</td>
+          <td>{{ row.text.length > 15 ? row.text.substring(0, 15) + '...' : row.text }}</td>
         </tr>
         </tbody>
       </table>
@@ -41,7 +41,7 @@
   <script>
   import News from '../../assets/프론트엔드.json';
 
-  console.log(News);
+  console.log(News.length);
   export default {
     data() { //변수생성
       return {
@@ -79,13 +79,11 @@
     },
     methods: {
       fnGetList() {
-        this.list = [
-        News[0],
-        News[1],
-        News[2],
-        News[3]
-        ]
+        this.list = [];
+        for (let i = 0; i < News.length; i++) {
+          this.list.push(News[i]);
+        }
       }
-      }
+    }
   }
   </script>
