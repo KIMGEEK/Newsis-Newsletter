@@ -1,0 +1,7 @@
+version: "3.0"
+services:
+  nesis-ai:
+    image: 
+    container_name: nesis
+    ports:
+      - "3306:3306"
