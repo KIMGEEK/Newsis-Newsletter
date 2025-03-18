@@ -8,7 +8,7 @@
         <tr>
           <th>No</th>
           <th>제목</th>
-          <th>작성자</th>
+          <th>내용</th>
           <th>등록일시</th>
         </tr>
         </thead>
@@ -16,7 +16,7 @@
         <tr v-for="(row, idx) in list" :key="idx">
           <td>{{ row.idx }}</td>
           <td><a v-on:click="fnView(`${row.idx}`)">{{ row.title }}</a></td>
-          <td>{{ row.author }}</td>
+          <td>{{ row.text }}</td>
           <td>{{ row.created_at }}</td>
         </tr>
         </tbody>
@@ -81,22 +81,10 @@
       fnGetList() {
         this.list = [
           {
-              "idx":1,
-              "title": "제목1",
-              "author": "작성자1",
-              "created_at": "작성일시1"
-          },
-          {
-              "idx":1,
-              "title": "제목1",
-              "author": "작성자1",
-              "created_at": "작성일시1"
-          },
-          {
-              "idx":1,
-              "title": "제목1",
-              "author": "작성자1",
-              "created_at": "작성일시1"
+            idx: 1,
+            title: '제목1',
+            text: '내용1',
+            created_at: '2025-03-18 10:00:00'
           }
         ]
       }
