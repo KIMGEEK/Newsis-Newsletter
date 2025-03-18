@@ -1,11 +1,11 @@
 /* common.css */
 .board-list {
-    width: 768px;
+    width: 1024px;
     margin: auto;
 }
 
 .board-detail {
-    width: 768px;
+    width: 1024px;
     margin: auto;
     text-align: left;
 }

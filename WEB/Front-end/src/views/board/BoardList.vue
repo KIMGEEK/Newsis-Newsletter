@@ -6,14 +6,16 @@
       <table class="w3-table-all">
         <thead>
         <tr>
+          <th>번호</th>
           <th>제목</th>
           <th>내용</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="(row, idx) in list" :key="idx">
+          <td>{{ row.idx }}</td>
           <td><a v-on:click="fnView(`${row.idx}`)">{{ row.title }}</a></td>
-          <td>{{ row.text.length > 15 ? row.text.substring(0, 15) + '...' : row.text }}</td>
+          <td>{{ row.text }}</td>
         </tr>
         </tbody>
       </table>
@@ -40,8 +42,6 @@
   
   <script>
   import News from '../../assets/프론트엔드.json';
-
-  console.log(News.length);
   export default {
     data() { //변수생성
       return {
@@ -80,9 +80,13 @@
     methods: {
       fnGetList() {
         this.list = [];
-        for (let i = 0; i < News.length; i++) {
-          this.list.push(News[i]);
-        }
+        News.map((item, index) => {
+          this.list.push({
+            idx: index + 1,
+            title: item.title,
+            text: item.text.length > 15 ? item.text.substring(0, 30) + '...' : item.text
+          });
+        });
       }
     }
   }
