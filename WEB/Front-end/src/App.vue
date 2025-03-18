@@ -31,6 +31,18 @@ export default {
   flex-direction: column;
 }
 
+.app-container {
+  min-height: 1280vh;
+  margin:0 auto;
+  width: 100%;
+  padding: 2rem;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem 0;
+}
+
 #nav {
   padding: 30px;
 }
@@ -38,6 +50,8 @@ export default {
 #nav a {
   font-weight: bold;
   color: #2c3e50;
+  text-decoration: none;
+  margin: 0 10px;
 }
 
 #nav a.router-link-exact-active {
