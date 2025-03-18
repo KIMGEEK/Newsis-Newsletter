@@ -17,3 +17,18 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.home {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+img {
+  width: 200px;
+  height: auto;
+  margin-bottom: 2rem;
+}
+</style>
