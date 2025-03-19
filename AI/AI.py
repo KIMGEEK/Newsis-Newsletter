@@ -12,24 +12,21 @@ import os
 
 
 # 디렉토리 이름
-DATA_DIR = "C:\\Users\\minqu\\"
+DATA_DIR = "/docker/Newsis-Newsletter/"
 today = dt.date.today()
-DIR_NAME = f"newsis_{today.year}-{today.month}-{today.day}\\"
+DIR_NAME = f"newsis_{today.year}-{today.month}-{today.day}/"
 secret_file = ["naver_id", "naver_password", "openai_key", "genai_key"]
 for file_name in secret_file:
 
-    with open(DATA_DIR + "api_key\\" + file_name + ".txt", "r") as fp:
-        match file_name:
-            case "naver_id":
-                naver_id = fp.readline()
-            case "naver_password":
-                naver_Key = fp.readline()
-            case "openai_key":
-                openai_Key = fp.readline()
-            case "genai_key":
-                genai_key = fp.readline()
-            case _:
-                print("error")
+    with open(DATA_DIR + "api_key/" + file_name + ".txt", "r") as fp:
+        if file_name == "naver_id":
+            naver_id = fp.readline()
+        elif file_name == "naver_password":
+            naver_Key = fp.readline()
+        elif file_name == "openai_key":
+            openai_Key = fp.readline()
+        elif file_name == "genai_key":
+            genai_key = fp.readline()
 
 # API key
 genaiL.configure(api_key=genai_key)
