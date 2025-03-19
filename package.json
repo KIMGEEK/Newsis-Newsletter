@@ -1,7 +1,0 @@
-{
-  "dependencies": {
-    "@ashwamegh/vue-link-preview": "^3.3.0",
-    "joi": "^17.13.3",
-    "vue": "^3.5.13"
-  }
-}
