@@ -1,23 +1,16 @@
 <template>
-  <PageHeader />
-  <!-- 헤더 컴포넌트 -->
-  <router-view />
-  <!-- 페이지 이동이 표시될 곳 -->
-  <PageFooter />
-  <!-- 푸터 컴포넌트 -->
+  <div id="app">
+    <nav id="nav">
+      <router-link to="/">뉴스레터</router-link>
+    </nav>
+    <router-view />
+  </div>
 </template>
 
 <script>
-import PageHeader from "./components/PageHeader.vue";
-import PageFooter from "./components/PageFooter.vue";
-
 export default {
-  name: "App",
-  components: {
-    PageFooter,
-    PageHeader,
-  },
-};
+  name: 'App'
+}
 </script>
 
 <style>
@@ -26,7 +19,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #000000;
   display: flex;
   flex-direction: column;
 }
@@ -45,6 +38,9 @@ export default {
 
 #nav {
   padding: 30px;
+  background: #fff;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 24px;
 }
 
 #nav a {

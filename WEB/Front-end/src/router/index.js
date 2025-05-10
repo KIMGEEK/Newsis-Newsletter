@@ -1,23 +1,23 @@
 import { createRouter, createWebHistory } from "vue-router";
-import PageHome from "../views/PageHome.vue";
-import PageAbout from "../views/PageAbout.vue";
-import BoardList from "../views/board/BoardList.vue";
+import NewsletterList from '../views/NewsletterList.vue';
+import NewsletterDetail from '../views/NewsletterDetail.vue';
 
 const routes = [
   {
     path: "/",
-    name: "PageHome",
-    component: PageHome,
+    name: "NewsletterList",
+    component: NewsletterList,
   },
   {
-    path: "/about",
-    name: "About",
-    component: PageAbout,
+    path: "/newsletter",
+    name: "NewsletterListAlias",
+    component: NewsletterList,
   },
   {
-    path: "/board/list",
-    name: "Board",
-    component: BoardList,
+    path: "/newsletter/:id",
+    name: "NewsletterDetail",
+    component: NewsletterDetail,
+    props: true,
   },
 ];
 
