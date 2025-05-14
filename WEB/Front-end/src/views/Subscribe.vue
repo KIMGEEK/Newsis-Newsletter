@@ -10,7 +10,9 @@
           v-model="formData.email" 
           required
           placeholder="example@email.com"
+          @input="validateEmail"
         >
+        <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
       </div>
       
       <div class="form-group">
@@ -21,7 +23,9 @@
           v-model="formData.name" 
           required
           placeholder="홍길동"
+          @input="validateName"
         >
+        <span v-if="errors.name" class="error-message">{{ errors.name }}</span>
       </div>
       
       <div class="form-group">
@@ -52,9 +56,12 @@
             AI
           </label>
         </div>
+        <span v-if="errors.categories" class="error-message">{{ errors.categories }}</span>
       </div>
 
-      <button type="submit" class="submit-btn">구독하기</button>
+      <button type="submit" class="submit-btn" :disabled="isSubmitting">
+        {{ isSubmitting ? '처리중...' : '구독하기' }}
+      </button>
     </form>
   </div>
 </template>
@@ -68,15 +75,72 @@ export default {
         email: '',
         name: '',
         categories: []
-      }
+      },
+      errors: {
+        email: '',
+        name: '',
+        categories: ''
+      },
+      isSubmitting: false
     }
   },
   methods: {
-    handleSubmit() {
-      // TODO: 실제 구독 처리 로직 구현
-      console.log('구독 정보:', this.formData)
-      alert('구독이 완료되었습니다!')
-      this.$router.push('/')
+    validateEmail() {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+      if (!this.formData.email) {
+        this.errors.email = '이메일을 입력해주세요.'
+      } else if (!emailRegex.test(this.formData.email)) {
+        this.errors.email = '올바른 이메일 형식이 아닙니다.'
+      } else {
+        this.errors.email = ''
+      }
+    },
+    validateName() {
+      if (!this.formData.name) {
+        this.errors.name = '이름을 입력해주세요.'
+      } else if (this.formData.name.length < 2) {
+        this.errors.name = '이름은 2글자 이상이어야 합니다.'
+      } else {
+        this.errors.name = ''
+      }
+    },
+    validateCategories() {
+      if (this.formData.categories.length === 0) {
+        this.errors.categories = '최소 하나의 카테고리를 선택해주세요.'
+        return false
+      }
+      this.errors.categories = ''
+      return true
+    },
+    async handleSubmit() {
+      try {
+        // 입력값 검증
+        this.validateEmail()
+        this.validateName()
+        const isCategoriesValid = this.validateCategories()
+
+        if (this.errors.email || this.errors.name || !isCategoriesValid) {
+          return
+        }
+
+        this.isSubmitting = true
+
+        // TODO: 실제 구독 처리 로직 구현
+        // 예시: API 호출
+        // await axios.post('/api/subscribe', this.formData)
+        
+        // 임시 처리
+        await new Promise(resolve => setTimeout(resolve, 1000))
+        console.log('구독 정보:', this.formData)
+        
+        alert('구독이 완료되었습니다!')
+        this.$router.push('/')
+      } catch (error) {
+        console.error('구독 처리 중 오류 발생:', error)
+        alert('구독 처리 중 오류가 발생했습니다. 다시 시도해주세요.')
+      } finally {
+        this.isSubmitting = false
+      }
     }
   }
 }
@@ -123,6 +187,13 @@ input[type="text"] {
   font-size: 16px;
 }
 
+input[type="email"]:focus,
+input[type="text"]:focus {
+  outline: none;
+  border-color: #42b983;
+  box-shadow: 0 0 0 2px rgba(66, 185, 131, 0.1);
+}
+
 .checkbox-group {
   display: flex;
   gap: 24px;
@@ -134,6 +205,12 @@ input[type="text"] {
   align-items: center;
   gap: 8px;
   cursor: pointer;
+}
+
+.error-message {
+  color: #dc3545;
+  font-size: 14px;
+  margin-top: 4px;
 }
 
 .submit-btn {
@@ -148,7 +225,12 @@ input[type="text"] {
   transition: background-color 0.2s;
 }
 
-.submit-btn:hover {
+.submit-btn:hover:not(:disabled) {
   background: #3aa876;
+}
+
+.submit-btn:disabled {
+  background: #a8d5c3;
+  cursor: not-allowed;
 }
 </style> 
