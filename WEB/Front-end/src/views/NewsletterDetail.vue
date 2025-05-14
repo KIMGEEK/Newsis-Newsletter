@@ -1,15 +1,16 @@
 <template>
   <div v-if="newsletter" class="newsletter-detail">
     <router-link to="/" class="back-link">← 목록으로</router-link>
-    <h1>{{ newsletter.title }}</h1>
+    <h1>{{ newsletter.date }}</h1>
     <div class="image-zoom-wrapper">
       <img
-        ref="detailImage"
+        ref="mainImage"
         class="detail-image"
         :src="`/src/assets/${newsletter.image}`"
         alt="본문 이미지"
       />
     </div>
+    <h2 class="title">{{ newsletter.title }}</h2>
     <div class="content">{{ newsletter.text }}</div>
     <div v-if="newsletter.reference && newsletter.reference.length" class="reference-list">
       <h3>참고 링크</h3>
@@ -19,16 +20,19 @@
         </li>
       </ul>
     </div>
+
     <!-- 나머지 게시글들 -->
     <div v-for="(item, idx) in otherNews" :key="idx" class="other-news">
       <hr />
       <div class="image-zoom-wrapper">
         <img
+          :ref="el => { if (el) otherImages[idx] = el }"
           class="detail-image"
           :src="`/src/assets/${item.image}`"
           alt="본문 이미지"
         />
       </div>
+      <h2 class="title">{{ item.title }}</h2>
       <div class="content">{{ item.text }}</div>
       <div v-if="item.reference && item.reference.length" class="reference-list">
         <h3>참고 링크</h3>
@@ -38,6 +42,10 @@
           </li>
         </ul>
       </div>
+    </div>
+    <div class="subscribe-section">
+      <p class="subscribe-text">우리의 소식을 더 듣고 싶다면 아래의 구독하기를 클릭해주세요</p>
+      <router-link to="/subscribe" class="subscribe-link">구독하기</router-link>
     </div>
     <router-link to="/" class="back-link">← 목록으로</router-link>
   </div>
@@ -55,22 +63,25 @@ export default {
   props: ['id'],
   setup(props) {
     const newsletter = newsletters[Number(props.id)]
-    const detailImage = ref(null)
+    const mainImage = ref(null)
+    const otherImages = ref([])
     const otherNews = computed(() => newsletters.filter((_, idx) => idx !== Number(props.id)))
 
     // 스크롤에 따라 이미지 확대
     const handleScroll = () => {
-      const img = detailImage.value
-      if (!img) return
-      const rect = img.getBoundingClientRect()
-      const windowHeight = window.innerHeight
-      if (rect.top < windowHeight && rect.bottom > 0) {
-        // 스크롤 비율 계산 (0~1)
-        const visible = Math.min(1, Math.max(0, 1 - rect.top / windowHeight))
-        img.style.transform = `scale(${1 + visible * 0.2})`
-      } else {
-        img.style.transform = 'scale(1)'
-      }
+      const images = [mainImage.value, ...otherImages.value]
+      images.forEach(img => {
+        if (!img) return
+        const rect = img.getBoundingClientRect()
+        const windowHeight = window.innerHeight
+        if (rect.top < windowHeight && rect.bottom > 0) {
+          // 스크롤 비율 계산 (0~1)
+          const visible = Math.min(1, Math.max(0, 1 - rect.top / windowHeight))
+          img.style.transform = `scale(${1 + visible * 0.2})`
+        } else {
+          img.style.transform = 'scale(1)'
+        }
+      })
     }
 
     onMounted(() => {
@@ -80,7 +91,7 @@ export default {
       window.removeEventListener('scroll', handleScroll)
     })
 
-    return { newsletter, detailImage, otherNews }
+    return { newsletter, mainImage, otherImages, otherNews }
   }
 }
 </script>
@@ -131,5 +142,33 @@ export default {
 }
 .other-news {
   margin-top: 48px;
+}
+.subscribe-section {
+  margin: 48px 0;
+  padding: 24px;
+  background: #f8f9fa;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.subscribe-text {
+  margin-bottom: 16px;
+  color: #666;
+  font-size: 16px;
+}
+
+.subscribe-link {
+  display: inline-block;
+  background: #42b983;
+  color: white;
+  padding: 12px 32px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.subscribe-link:hover {
+  background: #3aa876;
 }
 </style> 

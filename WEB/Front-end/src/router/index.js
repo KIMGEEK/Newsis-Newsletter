@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import NewsletterList from '../views/NewsletterList.vue';
 import NewsletterDetail from '../views/NewsletterDetail.vue';
+import Subscribe from '../views/Subscribe.vue';
 
 const routes = [
   {
@@ -18,6 +19,11 @@ const routes = [
     name: "NewsletterDetail",
     component: NewsletterDetail,
     props: true,
+  },
+  {
+    path: "/subscribe",
+    name: "Subscribe",
+    component: Subscribe,
   },
 ];
 
