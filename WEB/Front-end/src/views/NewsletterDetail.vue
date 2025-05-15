@@ -1,32 +1,20 @@
 <template>
-  <div v-if="newsletter" class="newsletter-detail">
+  <div v-if="newsletters && newsletters.length > 0" class="newsletter-detail">
     <!-- 상단 네비게이션 -->
     <router-link to="/" class="back-link">← 목록으로</router-link>
 
-    <!-- 메인 뉴스레터 -->
-    <section class="main-newsletter">
-      <h1>{{ newsletter.date }}</h1>
+    <!-- 뉴스레터 목록 -->
+    <section v-for="(item, idx) in newsletters" :key="idx" 
+             :class="['newsletter-item', { 'main-newsletter': idx === 0 }]">
+      <h1 v-if="idx === 0">{{ item.date }}</h1>
       <NewsletterImage 
-        :image-src="newsletter.image"
-        :ref="el => { if (el) mainImage = el }"
+        :image-src="item.image"
+        :ref="el => { if (el) newsletterImages[idx] = el }"
       />
-      <h2 class="title">{{ newsletter.title }}</h2>
-      <div class="content">{{ newsletter.text }}</div>
-      <ReferenceLinks v-if="newsletter.reference" :links="newsletter.reference" />
-    </section>
-
-    <!-- 다른 뉴스레터 목록 -->
-    <section class="other-newsletters">
-      <div v-for="(item, idx) in otherNews" :key="idx" class="other-news">
-        <hr />
-        <NewsletterImage 
-          :image-src="item.image"
-          :ref="el => { if (el) otherImages[idx] = el }"
-        />
-        <h2 class="title">{{ item.title }}</h2>
-        <div class="content">{{ item.text }}</div>
-        <ReferenceLinks v-if="item.reference" :links="item.reference" />
-      </div>
+      <h2 class="title">{{ item.title }}</h2>
+      <div class="content">{{ item.text }}</div>
+      <ReferenceLinks v-if="item.reference" :links="item.reference" />
+      <hr v-if="idx < newsletters.length - 1" />
     </section>
 
     <!-- 구독 섹션 -->
@@ -38,14 +26,15 @@
     <!-- 하단 네비게이션 -->
     <router-link to="/" class="back-link">← 목록으로</router-link>
   </div>
-  <div v-else>
+  <div v-else class="newsletter-detail">
     <p>뉴스레터를 찾을 수 없습니다.</p>
+    <router-link to="/" class="back-link">← 목록으로</router-link>
   </div>
 </template>
 
 <script>
 import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
-import newsletters from '../assets/프론트엔드.json'
+import newsletterData from '../assets/프론트엔드.json'
 
 // 이미지 컴포넌트
 const NewsletterImage = {
@@ -56,9 +45,21 @@ const NewsletterImage = {
       required: true
     }
   },
+  setup(props, { expose }) {
+    const imageRef = ref(null)
+    
+    expose({
+      getImageElement: () => imageRef.value
+    })
+
+    return {
+      imageRef
+    }
+  },
   template: `
     <div class="image-zoom-wrapper">
       <img
+        ref="imageRef"
         class="detail-image"
         :src="'/src/assets/' + imageSrc"
         alt="본문 이미지"
@@ -94,20 +95,34 @@ export default {
     NewsletterImage,
     ReferenceLinks
   },
-  props: ['id'],
+  props: {
+    id: {
+      type: [String, Number],
+      required: true
+    }
+  },
   setup(props) {
-    // 현재 뉴스레터와 다른 뉴스레터 목록 가져오기
-    const newsletter = newsletters[Number(props.id)]
-    const otherNews = computed(() => 
-      newsletters.filter((_, idx) => idx !== Number(props.id))
-    )
+    const newsletterImages = ref([])
 
-    // 이미지 참조 저장
-    const mainImage = ref(null)
-    const otherImages = ref([])
+    // 현재 뉴스레터를 첫 번째로, 나머지를 그 뒤로 정렬
+    const newsletters = computed(() => {
+      if (!newsletterData || !Array.isArray(newsletterData)) {
+        return []
+      }
+
+      const currentId = Number(props.id)
+      if (isNaN(currentId) || currentId < 0 || currentId >= newsletterData.length) {
+        return []
+      }
+
+      const currentNewsletter = newsletterData[currentId]
+      const otherNews = newsletterData.filter((_, idx) => idx !== currentId)
+      return [currentNewsletter, ...otherNews]
+    })
 
     // 이미지 확대 효과 계산 함수
     const calculateZoom = (rect, windowHeight) => {
+      if (!rect) return 'scale(1)'
       if (rect.top < windowHeight && rect.bottom > 0) {
         const visible = Math.min(1, Math.max(0, 1 - rect.top / windowHeight))
         return `scale(${1 + visible * 0.2})`
@@ -117,13 +132,17 @@ export default {
 
     // 스크롤 이벤트 핸들러
     const handleScroll = () => {
-      const images = [mainImage.value, ...otherImages.value]
+      if (!newsletterImages.value) return
+      
+      const images = newsletterImages.value
       const windowHeight = window.innerHeight
 
       images.forEach(img => {
         if (!img) return
-        const rect = img.getBoundingClientRect()
-        img.style.transform = calculateZoom(rect, windowHeight)
+        const imageElement = img.getImageElement()
+        if (!imageElement) return
+        const rect = imageElement.getBoundingClientRect()
+        imageElement.style.transform = calculateZoom(rect, windowHeight)
       })
     }
 
@@ -136,10 +155,8 @@ export default {
     })
 
     return { 
-      newsletter, 
-      otherNews, 
-      mainImage, 
-      otherImages 
+      newsletters,
+      newsletterImages
     }
   }
 }
@@ -154,6 +171,15 @@ export default {
   border-radius: 12px;
   box-shadow: 0 2px 8px #0001;
   padding: 32px;
+}
+
+/* 뉴스레터 아이템 스타일 */
+.newsletter-item {
+  margin-bottom: 48px;
+}
+
+.main-newsletter {
+  margin-bottom: 64px;
 }
 
 /* 이미지 스타일 */
@@ -200,11 +226,6 @@ export default {
   color: #e55;
   text-decoration: none;
   font-weight: bold;
-}
-
-/* 다른 뉴스레터 섹션 */
-.other-news {
-  margin-top: 48px;
 }
 
 /* 구독 섹션 */
