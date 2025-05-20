@@ -1,7 +1,31 @@
-version: "3.0"
+version: '3'
 services:
-  nesis-ai:
-    image: 
-    container_name: nesis
+    
+  nginx:
+    container_name: newsis_newslatter_server_nginx
+    image: nginx
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    restart: always
     ports:
-      - "3306:3306"
+      - "80:80"
+    depends_on:
+      - django
+      
+  django:
+    container_name: newsis_newslatter_server_django
+    image: django_app
+    working_dir: /docker/Newsis_newsletter
+    volumes:
+      - ./:/home/kakao_chatbot
+    # command: 
+    #   - bash
+    #   - -c
+    #   - "uwsgi -i /home/kakao_chatbot/uwsgi.ini && tail -f /dev/null"
+    command: >
+      sh -c "pip install --upgrade pip && pip install -r requirements.txt && python manage.py migrate && tail -f /dev/null"
+    ports: 
+      - "8004:8000"
+    depends_on:
+      - mysql
