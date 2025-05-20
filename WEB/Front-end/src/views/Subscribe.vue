@@ -67,6 +67,9 @@
 </template>
 
 <script>
+import axios from "axios";
+let url = "http://localhost:8000/subscribe/";
+
 export default {
   name: 'Subscribe',
   data() {
@@ -127,11 +130,23 @@ export default {
 
         // TODO: 실제 구독 처리 로직 구현
         // 예시: API 호출
-        // await axios.post('/api/subscribe', this.formData)
+        //await axios.post('http://localhost:8000/subscribe', this.formData)
+
+        axios({
+          method: "POST",
+          url: url,
+          data: this.formData,
+        })
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((error) => {
+            console.log("Failed to create:", error.response);
+          });
         
         // 임시 처리
-        await new Promise(resolve => setTimeout(resolve, 1000))
-        console.log('구독 정보:', this.formData)
+        //await new Promise(resolve => setTimeout(resolve, 1000))
+        //console.log('구독 정보:', this.formData)
         
         alert('구독이 완료되었습니다!')
         this.$router.push('/')
