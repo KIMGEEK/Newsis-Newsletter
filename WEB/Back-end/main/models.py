@@ -9,3 +9,8 @@ class Post(models.Model):
 
     def __str__(self):
         return self.postname
+
+class User(models.Model):
+    email = models.EmailField()
+    name = models.CharField(max_length=30)
+    categories = models.CharField(max_length=10, default="000") # back-front-ai, 000 ~ 111
