@@ -8,7 +8,6 @@
       <h1>{{ newsletter.date }}</h1>
       <NewsletterImage 
         :image-src="newsletter.image"
-        :ref="el => { if (el) mainImage = el }"
       />
       <h2 class="title">{{ newsletter.title }}</h2>
       <div class="content">{{ newsletter.text }}</div>
@@ -21,7 +20,6 @@
         <hr />
         <NewsletterImage 
           :image-src="item.image"
-          :ref="el => { if (el) otherImages[idx] = el }"
         />
         <h2 class="title">{{ item.title }}</h2>
         <div class="content">{{ item.text }}</div>
@@ -61,10 +59,28 @@ const NewsletterImage = {
       <img
         class="detail-image"
         :src="'/src/assets/' + imageSrc"
-        alt="본문 이미지"
+        :alt="'뉴스레터 이미지: ' + imageSrc"
+        @error="handleImageError"
+        @load="handleImageLoad"
       />
+      <p v-if="imageError" class="image-error">이미지를 불러올 수 없습니다: {{ imageSrc }}</p>
     </div>
-  `
+  `,
+  data() {
+    return {
+      imageError: false
+    }
+  },
+  methods: {
+    handleImageError(e) {
+      console.error('이미지 로드 실패:', this.imageSrc);
+      this.imageError = true;
+    },
+    handleImageLoad() {
+      console.log('이미지 로드 성공:', this.imageSrc);
+      this.imageError = false;
+    }
+  }
 }
 
 // 참고 링크 컴포넌트
@@ -102,44 +118,9 @@ export default {
       newsletters.filter((_, idx) => idx !== Number(props.id))
     )
 
-    // 이미지 참조 저장
-    const mainImage = ref(null)
-    const otherImages = ref([])
-
-    // 이미지 확대 효과 계산 함수
-    const calculateZoom = (rect, windowHeight) => {
-      if (rect.top < windowHeight && rect.bottom > 0) {
-        const visible = Math.min(1, Math.max(0, 1 - rect.top / windowHeight))
-        return `scale(${1 + visible * 0.2})`
-      }
-      return 'scale(1)'
-    }
-
-    // 스크롤 이벤트 핸들러
-    const handleScroll = () => {
-      const images = [mainImage.value, ...otherImages.value]
-      const windowHeight = window.innerHeight
-
-      images.forEach(img => {
-        if (!img) return
-        const rect = img.getBoundingClientRect()
-        img.style.transform = calculateZoom(rect, windowHeight)
-      })
-    }
-
-    // 컴포넌트 마운트/언마운트 시 이벤트 리스너 설정/제거
-    onMounted(() => {
-      window.addEventListener('scroll', handleScroll)
-    })
-    onBeforeUnmount(() => {
-      window.removeEventListener('scroll', handleScroll)
-    })
-
     return { 
       newsletter, 
-      otherNews, 
-      mainImage, 
-      otherImages 
+      otherNews
     }
   }
 }
@@ -159,14 +140,15 @@ export default {
 /* 이미지 스타일 */
 .image-zoom-wrapper {
   width: 100%;
+  max-width: 600px;
+  margin: 24px auto;
   overflow: hidden;
-  margin: 24px 0;
   border-radius: 8px;
 }
 
 .detail-image {
   width: 100%;
-  max-height: 350px;
+  max-height: 250px;
   object-fit: cover;
   transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
   will-change: transform;
