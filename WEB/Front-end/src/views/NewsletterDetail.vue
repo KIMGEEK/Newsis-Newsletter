@@ -129,29 +129,34 @@ export default {
 <style scoped>
 /* 전체 레이아웃 */
 .newsletter-detail {
-  max-width: 700px;
+  max-width: 900px;
   margin: 40px auto;
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 2px 8px #0001;
   padding: 32px;
+  box-sizing: border-box;  /* 패딩을 너비에 포함 */
 }
 
 /* 이미지 스타일 */
 .image-zoom-wrapper {
   width: 100%;
-  max-width: 600px;
+  max-width: 400px;
   margin: 24px auto;
-  overflow: hidden;
   border-radius: 8px;
+  background: #f5f5f5;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .detail-image {
   width: 100%;
-  max-height: 250px;
-  object-fit: cover;
-  transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
-  will-change: transform;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  max-width: 100%;
 }
 
 /* 텍스트 스타일 */
