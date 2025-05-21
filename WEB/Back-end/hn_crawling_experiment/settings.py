@@ -127,8 +127,6 @@ REST_FRAMEWORK = {
         'anon': '100/day',
         'user': '1000/day',
     },
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 10
 }
 
 # Internationalization
