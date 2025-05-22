@@ -1,4 +1,4 @@
-from .models import Post
+from .models import Post, User
 
 from .serializers import PostSerializer, UserSerializer
 
@@ -14,13 +14,15 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
 
-class UserCreateViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = UserSerializer
+    queryset = User.objects.all()
 
     def create(self, request):
         category_arr = request.data['categories']
+        
         category_dict = {'web': '0', 'ai': '0', 'game': '0'}
-
+        
         for category in category_arr:
             category_dict[category] = '1'
         
