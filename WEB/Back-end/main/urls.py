@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from .views import PostViewSet, UserCreateViewSet
+from .views import PostViewSet, UserViewSet
 
 from django.conf.urls.static import static
 from django.conf import settings
@@ -10,7 +10,7 @@ from rest_framework import routers
 
 router = routers.DefaultRouter()
 router.register('post', PostViewSet, basename='post')
-router.register('subscribe', UserCreateViewSet, basename='subscribe')
+router.register('user', UserViewSet, basename='user')
 
 urlpatterns = [
     path('', include(router.urls))

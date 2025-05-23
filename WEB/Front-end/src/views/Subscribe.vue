@@ -35,17 +35,9 @@
             <input 
               type="checkbox" 
               v-model="formData.categories" 
-              value="frontend"
+              value="web"
             >
-            프론트엔드
-          </label>
-          <label class="checkbox-label">
-            <input 
-              type="checkbox" 
-              v-model="formData.categories" 
-              value="backend"
-            >
-            백엔드
+            웹
           </label>
           <label class="checkbox-label">
             <input 
@@ -54,6 +46,14 @@
               value="ai"
             >
             AI
+          </label>
+          <label class="checkbox-label">
+            <input 
+              type="checkbox" 
+              v-model="formData.categories" 
+              value="game"
+            >
+            게임
           </label>
         </div>
         <span v-if="errors.categories" class="error-message">{{ errors.categories }}</span>
