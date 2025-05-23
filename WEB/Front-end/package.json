@@ -4,18 +4,18 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview"
   },
   "resolutions": {
-  "ajv": "6.5.5"
-},
+    "ajv": "6.5.5"
+  },
   "dependencies": {
     "ajv": "6.8.1",
     "axios": "^1.9.0",
     "joi": "^17.13.3",
-    "vue": "^3.5.13",
+    "vue": "^3.5.14",
     "vue-router": "^4.5.0"
   },
   "devDependencies": {

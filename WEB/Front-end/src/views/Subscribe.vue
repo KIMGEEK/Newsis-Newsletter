@@ -20,7 +20,7 @@
         <input 
           type="text" 
           id="name" 
-          v-model="formData.name" 
+          v-model="formData.name"
           required
           placeholder="홍길동"
           @input="validateName"
