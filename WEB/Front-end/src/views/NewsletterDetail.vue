@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { onMounted, onBeforeUnmount, ref, computed } from 'vue'
+import { computed } from 'vue'
 import newsletters from '../assets/프론트엔드.json'
 
 // 이미지 컴포넌트
@@ -135,13 +135,13 @@ export default {
   border-radius: 12px;
   box-shadow: 0 2px 8px #0001;
   padding: 32px;
-  box-sizing: border-box;  /* 패딩을 너비에 포함 */
+  box-sizing: border-box;
 }
 
 /* 이미지 스타일 */
-.image-zoom-wrapper {
+:deep(.image-zoom-wrapper) {
   width: 100%;
-  max-width: 400px;
+  max-width: 300px;
   margin: 24px auto;
   border-radius: 8px;
   background: #f5f5f5;
@@ -151,12 +151,13 @@ export default {
   align-items: center;
 }
 
-.detail-image {
+:deep(.detail-image) {
   width: 100%;
   height: auto;
   display: block;
   object-fit: contain;
   max-width: 100%;
+  max-height: 300px;
 }
 
 /* 텍스트 스타일 */
