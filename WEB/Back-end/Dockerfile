@@ -1,8 +1,8 @@
 FROM python:3.10
 
-WORKDIR /home/web_server/Newsis-Newsletter/WEB/
+WORKDIR /docker/Newsis-Newsletter/WEB/Back-end/
 
-ADD . /home/web_server/Newsis-Newsletter/WEB/
+ADD . /docker/Newsis-Newsletter/WEB/Back-end/
 
 ENV PYTHONUNBUFFERED=1
 
@@ -20,5 +20,6 @@ COPY requirements.txt .
 
 RUN pip install -r requirements.txt --no-cache-dir
 
+
 ENTRYPOINT ["sh", "-c"]
-CMD ["python manage.py migrate & python manage.py runserver 0.0.0.0:8000"]
+CMD ["python manage.py migrate & python manage.py collectstatic --no-input & gunicorn --bind 0.0.0.0:8090 hn_crawling_experiment.wsgi:application"]
