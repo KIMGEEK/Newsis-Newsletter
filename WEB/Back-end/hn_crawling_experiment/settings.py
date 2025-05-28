@@ -26,12 +26,13 @@ SECRET_KEY = 'django-insecure-y(ju+zylxl$s%bkg*rqb6*_t=b_bq0c)j2=pgxh2htbg14wd7g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'common.apps.CommonConfig',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -41,10 +42,10 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'main',
     'rest_framework',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,16 +53,19 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
-        'http://localhost:5173',
-        'http://127.0.0.1:5173',
+        'http://localhost:24039',
+        'http://127.0.0.1:24039',
+        'http://127.0.0.1:8080',
+        'http://localhost:8080',
+
 )
 
 ROOT_URLCONF = 'hn_crawling_experiment.urls'
+
 
 TEMPLATES = [
     {
@@ -144,8 +148,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = 'static/'
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
@@ -153,3 +157,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:9000",
+    "http://localhost:9000",
+]

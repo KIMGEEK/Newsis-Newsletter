@@ -1,31 +1,35 @@
 version: '3'
 services:
-    
-  nginx:
-    container_name: newsis_newslatter_server_nginx
-    image: nginx
+  django:
     build:
-      context: .
-      dockerfile: Dockerfile_nginx
-    restart: always
+      context: ./WEB/Back-end
+      dockerfile: Dockerfile
+    container_name: newsis_newsletter_django
+    volumes:
+      - ./WEB:/docker/Newsis-Newsletter/WEB
+    expose:
+      - 8090
+  
+  nginx-django:
+    build:
+      context: ./WEB/Back-end/nginx
+      dockerfile: Dockerfile
+    container_name: newsis_newsletter_nginx-django
+    volumes:
+      - ./WEB:/docker/Newsis-Newsletter/WEB
     ports:
-      - "80:80"
+      - "9000:8091"
     depends_on:
       - django
-      
-  django:
-    container_name: newsis_newslatter_server_django
-    image: django_app
-    working_dir: /docker/Newsis_newsletter
+  nginx-web:
+    container_name: newsis_newsletter_nginx_web
     volumes:
-      - ./:/home/kakao_chatbot
-    # command: 
-    #   - bash
-    #   - -c
-    #   - "uwsgi -i /home/kakao_chatbot/uwsgi.ini && tail -f /dev/null"
-    command: >
-      sh -c "pip install --upgrade pip && pip install -r requirements.txt && python manage.py migrate && tail -f /dev/null"
-    ports: 
-      - "8004:8000"
+      - /docker/Newsis-Newsletter/WEB:/docker/Newsis-Newsletter/WEB
+    build:
+      context: ./WEB/Front-end
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "24039:8080"
     depends_on:
-      - mysql
+      - django

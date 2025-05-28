@@ -20,7 +20,7 @@
         <input 
           type="text" 
           id="name" 
-          v-model="formData.name"
+          v-model="formData.name" 
           required
           placeholder="이름을 입력해주세요."
           @input="validateName"
@@ -68,7 +68,7 @@
 
 <script>
 import axios from "axios";
-let url = "http://localhost:8000/subscribe/";
+let url = "http://127.0.0.1:9000/user/";
 
 export default {
   name: 'Subscribe',

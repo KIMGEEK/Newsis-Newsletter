@@ -175,3 +175,6 @@ cython_debug/
 
 api_key/
 newsis/
+WEB/Back-end/static
+**/__pycache__/
+**/db.sqlite3/
