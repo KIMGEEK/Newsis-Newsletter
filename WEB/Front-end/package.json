@@ -8,12 +8,19 @@
     "build": "vite build",
     "preview": "vite preview"
   },
+  "resolutions": {
+  "ajv": "6.5.5"
+},
   "dependencies": {
-    "vue": "^3.5.13"
+    "ajv": "6.8.1",
+    "axios": "^1.9.0",
+    "joi": "^17.13.3",
+    "vue": "^3.5.13",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.2.1",
-    "vite": "^6.2.1",
+    "vite": "^6.2.5",
     "vite-plugin-vue-devtools": "^7.7.2"
   }
 }

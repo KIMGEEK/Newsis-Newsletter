@@ -174,3 +174,7 @@ cython_debug/
 .pypirc
 
 api_key/
+newsis/
+WEB/Back-end/static
+**/__pycache__/
+**/db.sqlite3/

@@ -1,0 +1,35 @@
+version: '3'
+services:
+  django:
+    build:
+      context: ./WEB/Back-end
+      dockerfile: Dockerfile
+    container_name: newsis_newsletter_django
+    volumes:
+      - ./WEB:/docker/Newsis-Newsletter/WEB
+    expose:
+      - 8090
+  
+  nginx-django:
+    build:
+      context: ./WEB/Back-end/nginx
+      dockerfile: Dockerfile
+    container_name: newsis_newsletter_nginx-django
+    volumes:
+      - ./WEB:/docker/Newsis-Newsletter/WEB
+    ports:
+      - "9000:8091"
+    depends_on:
+      - django
+  nginx-web:
+    container_name: newsis_newsletter_nginx_web
+    volumes:
+      - /docker/Newsis-Newsletter/WEB:/docker/Newsis-Newsletter/WEB
+    build:
+      context: ./WEB/Front-end
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "24039:8080"
+    depends_on:
+      - django

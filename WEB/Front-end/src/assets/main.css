@@ -1,10 +1,16 @@
 @import './base.css';
 
+
 #app {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
   font-weight: normal;
+  background-color: #FFFFFF;
+}
+
+body {
+  background-color: #FFFFFF;
 }
 
 a,
@@ -13,6 +19,18 @@ a,
   color: hsla(160, 100%, 37%, 1);
   transition: 0.4s;
   padding: 3px;
+}
+
+h2 {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.back-link {
+  display: flex;
+  justify-content: flex-start;
+  font-size: 15px;
+  font-weight: bold;
 }
 
 @media (hover: hover) {
