@@ -18,8 +18,8 @@ export default NewsletterList
       <div class="thumbnail-wrapper">
         <img
           class="thumbnail"
-          :src="`/src/assets/${preview.image}`"
-          :alt="preview.title"
+          src="http://localhost:9000/media/2025-5-4/0.png"
+          alt="썸네일"
         />
         <div class="preview-slide">
           <p>{{ preview.text.slice(0, 50) }}...</p>
