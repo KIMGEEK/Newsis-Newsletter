@@ -1,0 +1,1 @@
+bash -c "source ./newsis/bin/activate && python ./AI/temp.py"

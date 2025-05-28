@@ -17,7 +17,7 @@ export default NewsletterList
       <div class="thumbnail-wrapper">
         <img
           class="thumbnail"
-          :src="`/src/assets/${newsPreview.image}`"
+          src="http://localhost:9000/media/2025-5-4/0.png"
           alt="썸네일"
         />
         <div class="preview-slide">
