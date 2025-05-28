@@ -7,7 +7,6 @@ export default NewsletterList
 <template>
   <div class="subscribe-banner">
     <router-link to="/subscribe" class="subscribe-btn">구독하기</router-link>
-    <router-link to="/test" class="test-btn">테스트 페이지</router-link>
   </div>
   <div class="newsletter-list">
     <div
@@ -65,22 +64,6 @@ export default NewsletterList
 
 .subscribe-btn:hover {
   background: #3aa876;
-}
-
-.test-btn {
-  display: inline-block;
-  background: #666;
-  color: white;
-  padding: 12px 32px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.2s;
-  margin-left: 10px;
-}
-
-.test-btn:hover {
-  background: #555;
 }
 
 .newsletter-card {

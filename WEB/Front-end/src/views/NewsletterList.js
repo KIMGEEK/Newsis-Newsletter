@@ -1,5 +1,8 @@
 import newsletters from '../assets/프론트엔드.json'
 import newsletters2 from '../assets/프론트엔드 copy.json'
+import axios from 'axios';
+
+const BASE_URL = 'http://127.0.0.1:9000/post/'
 
 export default {
   name: 'NewsletterList',
