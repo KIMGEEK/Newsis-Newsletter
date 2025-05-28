@@ -6,26 +6,28 @@ export default NewsletterList
 
 <template>
   <div class="subscribe-banner">
-      <router-link to="/subscribe" class="subscribe-btn">구독하기</router-link>
-    </div>
+    <router-link to="/subscribe" class="subscribe-btn">구독하기</router-link>
+    <router-link to="/test" class="test-btn">테스트 페이지</router-link>
+  </div>
   <div class="newsletter-list">
     <div
-      v-if="newsPreview"
+      v-for="(preview, idx) in newsletterPreviews.slice().reverse()"
+      :key="idx"
       class="newsletter-card"
-      @click="goToDetail(0)"
+      @click="goToDetail(idx)"
     >
       <div class="thumbnail-wrapper">
         <img
           class="thumbnail"
-          :src="`/src/assets/${newsPreview.image}`"
-          alt="썸네일"
+          :src="`/src/assets/${preview.image}`"
+          :alt="preview.title"
         />
         <div class="preview-slide">
-          <p>{{ newsPreview.text.slice(0, 50) }}...</p>
+          <p>{{ preview.text.slice(0, 50) }}...</p>
         </div>
       </div>
       <div class="card-content">
-        <h2>{{ newsPreview.date }}</h2>
+        <h3>{{ preview.date || '최신 뉴스레터' }}</h3>
       </div>
     </div>
   </div>
@@ -37,6 +39,7 @@ export default NewsletterList
   flex-direction: column;
   gap: 24px;
   align-items: center;
+  padding: 20px;
 }
 
 .subscribe-banner {
@@ -62,6 +65,22 @@ export default NewsletterList
 
 .subscribe-btn:hover {
   background: #3aa876;
+}
+
+.test-btn {
+  display: inline-block;
+  background: #666;
+  color: white;
+  padding: 12px 32px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.2s;
+  margin-left: 10px;
+}
+
+.test-btn:hover {
+  background: #555;
 }
 
 .newsletter-card {
@@ -117,5 +136,17 @@ export default NewsletterList
 
 .card-content {
   padding: 16px;
+}
+
+.card-content h2 {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.card-content h3 {
+  font-size: 18px;
+  color: #333;
+  margin: 0;
 }
 </style> 
