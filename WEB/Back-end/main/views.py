@@ -81,8 +81,7 @@ class DataViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         if ip_addr not in ALLOWED_POST_IP:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
+        serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():
             serializer.save()
