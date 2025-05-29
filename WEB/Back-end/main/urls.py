@@ -8,7 +8,7 @@ from rest_framework import routers
 
 
 
-router = routers.DefaultRouter()
+router = routers.SimpleRouter()
 router.register('post', PostViewSet, basename='post')
 router.register('user', UserViewSet, basename='user')
 router.register('data', DataViewSet, basename='data')
