@@ -10,7 +10,7 @@ from rest_framework import status
 
 # Create your views here.
 
-class PostViewSet(viewsets.ModelViewSet):
+class PostViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = PostSerializer
 
     def get_queryset(self):
@@ -22,6 +22,7 @@ class PostViewSet(viewsets.ModelViewSet):
             queryset = Post.objects.filter(weeks=weeks) # weeks가 '2025-5-4'인 애들
 
         return queryset
+    
 
 class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = UserSerializer
@@ -49,12 +50,39 @@ class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gener
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+    def list(self, request, *args, **kwargs):
+        ALLOWED_GET_IP = [
+            '127.0.0.1',
+            '172.23.0.1',
+        ]
+
+        ip_addr = request.META['REMOTE_ADDR']
+
+        if ip_addr not in ALLOWED_GET_IP:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        
+        queryset = self.get_queryset()
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
 class DataViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     
     def create(self, request):
-        serializer = PostSerializer(data=request.data)
+        ALLOWED_POST_IP = [
+            '127.0.0.1',
+            '172.23.0.1',
+        ]
+
+        ip_addr = request.META['REMOTE_ADDR']
+
+        if ip_addr not in ALLOWED_POST_IP:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
 
         if serializer.is_valid():
             serializer.save()
