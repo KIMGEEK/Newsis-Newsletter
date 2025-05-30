@@ -1,22 +1,40 @@
-import newsletters from '../assets/프론트엔드.json'
-import newsletters2 from '../assets/프론트엔드 copy.json'
 import axios from 'axios';
 
-const BASE_URL = 'http://127.0.0.1:9000/post/'
+export const BASE_URL = 'http://203.255.81.76:24040/post/';
+export const MEDIA_BASE_URL = 'http://203.255.81.76:24040/media/';
 
 export default {
   name: 'NewsletterList',
+  data() {
+    return {
+      newsletters: [],
+      loading: true,
+      error: null
+    }
+  },
+  async created() {
+    try {
+      const response = await axios.get(BASE_URL);
+      this.newsletters = response.data;
+      this.loading = false;
+    } catch (err) {
+      this.error = 'Failed to fetch newsletters';
+      this.loading = false;
+      console.error('Error fetching newsletters:', err);
+    }
+  },
   computed: {
     newsletterPreviews() {
-      return [
-        newsletters[0],  // 첫 번째 게시글의 첫 번째 데이터
-        newsletters2[0]  // 두 번째 게시글의 첫 번째 데이터
-      ]
+      return this.newsletters.map(week => ({
+        ...week.news[0],
+        week: week.weeks,
+        imageUrl: `${MEDIA_BASE_URL}${week.weeks}/${week.index}.png`
+      }));
     }
   },
   methods: {
-    goToDetail(idx) {
-      this.$router.push(`/newsletter/${idx}`)
+    goToDetail(week) {
+      this.$router.push(`/newsletter/${week}`);
     }
   }
 } 

@@ -1,7 +1,23 @@
 <script>
-import NewsletterList from './NewsletterList.js'
+import NewsletterList, { BASE_URL } from './NewsletterList.js'
+import axios from 'axios'
 
-export default NewsletterList
+export default {
+  ...NewsletterList,
+  async created() {
+    try {
+      const response = await axios.get(BASE_URL);
+      console.log('API Response:', response.data);
+      this.newsletters = response.data;
+      console.log('Processed newsletters:', this.newsletters);
+      this.loading = false;
+    } catch (err) {
+      this.error = 'Failed to fetch newsletters';
+      this.loading = false;
+      console.error('Error fetching newsletters:', err);
+    }
+  }
+}
 </script>
 
 <template>
@@ -9,24 +25,28 @@ export default NewsletterList
     <router-link to="/subscribe" class="subscribe-btn">구독하기</router-link>
   </div>
   <div class="newsletter-list">
+    <div v-if="loading">Loading...</div>
+    <div v-else-if="error">{{ error }}</div>
     <div
+      v-else
       v-for="(preview, idx) in newsletterPreviews.slice().reverse()"
-      :key="idx"
+      :key="preview.week"
       class="newsletter-card"
-      @click="goToDetail(idx)"
+      @click="goToDetail(preview.week)"
     >
       <div class="thumbnail-wrapper">
         <img
           class="thumbnail"
-          src="http://localhost:9000/media/2025-5-4/0.png"
-          alt="썸네일"
+          :src="preview.imageUrl"
+          :alt="preview.title"
         />
         <div class="preview-slide">
           <p>{{ preview.text.slice(0, 50) }}...</p>
         </div>
       </div>
       <div class="card-content">
-        <h3>{{ preview.date || '최신 뉴스레터' }}</h3>
+        <h2>{{ preview.week }}</h2>
+        <h3>{{ preview.title }}</h3>
       </div>
     </div>
   </div>
