@@ -1,30 +1,18 @@
 <template>
-  <div v-if="newsletter" class="newsletter-detail">
+  <div class="newsletter-detail">
     <!-- 상단 네비게이션 -->
     <router-link to="/" class="back-link">← 목록으로</router-link>
 
-    <!-- 메인 뉴스레터 -->
-    <section class="main-newsletter">
-      <h1>{{ newsletter.date }}</h1>
+    <!-- 뉴스레터 내용 -->
+    <section v-for="(item, idx) in currentNewsletter" :key="idx" class="newsletter-item">
+      <h1>{{ item.date || '최신 뉴스레터' }}</h1>
       <NewsletterImage 
-        :image-src="newsletter.image"
+        :image-src="item.image"
       />
-      <h2 class="title">{{ newsletter.title }}</h2>
-      <div class="content">{{ newsletter.text }}</div>
-      <ReferenceLinks v-if="newsletter.reference" :links="newsletter.reference" />
-    </section>
-
-    <!-- 다른 뉴스레터 목록 -->
-    <section class="other-newsletters">
-      <div v-for="(item, idx) in otherNews" :key="idx" class="other-news">
-        <hr />
-        <NewsletterImage 
-          :image-src="item.image"
-        />
-        <h2 class="title">{{ item.title }}</h2>
-        <div class="content">{{ item.text }}</div>
-        <ReferenceLinks v-if="item.reference" :links="item.reference" />
-      </div>
+      <h2 class="title">{{ item.title }}</h2>
+      <div class="content">{{ item.text }}</div>
+      <ReferenceLinks v-if="item.reference" :links="item.reference" />
+      <hr v-if="idx < currentNewsletter.length - 1" />
     </section>
 
     <!-- 구독 섹션 -->
@@ -36,14 +24,12 @@
     <!-- 하단 네비게이션 -->
     <router-link to="/" class="back-link">← 목록으로</router-link>
   </div>
-  <div v-else>
-    <p>뉴스레터를 찾을 수 없습니다.</p>
-  </div>
 </template>
 
 <script>
 import { computed } from 'vue'
 import newsletters from '../assets/프론트엔드.json'
+import newsletters2 from '../assets/프론트엔드 copy.json'
 
 // 이미지 컴포넌트
 const NewsletterImage = {
@@ -112,15 +98,13 @@ export default {
   },
   props: ['id'],
   setup(props) {
-    // 현재 뉴스레터와 다른 뉴스레터 목록 가져오기
-    const newsletter = newsletters[Number(props.id)]
-    const otherNews = computed(() => 
-      newsletters.filter((_, idx) => idx !== Number(props.id))
-    )
+    const allNewsletters = [newsletters, newsletters2]
+    const currentNewsletter = computed(() => {
+      return allNewsletters[Number(props.id)]
+    })
 
     return { 
-      newsletter, 
-      otherNews
+      currentNewsletter
     }
   }
 }
@@ -136,6 +120,10 @@ export default {
   box-shadow: 0 2px 8px #0001;
   padding: 32px;
   box-sizing: border-box;
+}
+
+.newsletter-item {
+  margin-bottom: 48px;
 }
 
 /* 이미지 스타일 */
@@ -188,11 +176,6 @@ export default {
   color: #e55;
   text-decoration: none;
   font-weight: bold;
-}
-
-/* 다른 뉴스레터 섹션 */
-.other-news {
-  margin-top: 48px;
 }
 
 /* 구독 섹션 */

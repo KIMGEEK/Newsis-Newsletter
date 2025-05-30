@@ -22,13 +22,13 @@
           id="name" 
           v-model="formData.name" 
           required
-          placeholder="홍길동"
+          placeholder="이름을 입력해주세요."
           @input="validateName"
         >
         <span v-if="errors.name" class="error-message">{{ errors.name }}</span>
       </div>
       
-      <div class="form-group">
+      <!--<div class="form-group">
         <label>구독 카테고리</label>
         <div class="checkbox-group">
           <label class="checkbox-label">
@@ -54,10 +54,10 @@
               value="game"
             >
             게임
-          </label>
+          </label> 
         </div>
         <span v-if="errors.categories" class="error-message">{{ errors.categories }}</span>
-      </div>
+      </div>-->
 
       <button type="submit" class="submit-btn" :disabled="isSubmitting">
         {{ isSubmitting ? '처리중...' : '구독하기' }}

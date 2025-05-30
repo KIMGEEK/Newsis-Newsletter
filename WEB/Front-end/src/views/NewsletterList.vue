@@ -1,68 +1,29 @@
 <template>
-  <div class="subscribe-container">
-    <h1>뉴스레터 구독하기</h1>
-    <form @submit.prevent="handleSubmit" class="subscribe-form">
-      <div class="form-group">
-        <label for="email">이메일</label>
-        <input 
-          type="email" 
-          id="email" 
-          v-model="formData.email" 
-          required
-          placeholder="example@email.com"
-          @input="validateEmail"
-        >
-        <span v-if="errors.email" class="error-message">{{ errors.email }}</span>
-      </div>
-      
-      <div class="form-group">
-        <label for="name">이름</label>
-        <input 
-          type="text" 
-          id="name" 
-          v-model="formData.name" 
-          required
-          placeholder="홍길동"
-          @input="validateName"
-        >
-        <span v-if="errors.name" class="error-message">{{ errors.name }}</span>
-      </div>
-      
-      <div class="form-group">
-        <label>구독 카테고리</label>
-        <div class="checkbox-group">
-          <label class="checkbox-label">
-            <input 
-              type="checkbox" 
-              v-model="formData.categories" 
-              value="web"
-            >
-            웹
-          </label>
-          <label class="checkbox-label">
-            <input 
-              type="checkbox" 
-              v-model="formData.categories" 
-              value="ai"
-            >
-            AI
-          </label>
-          <label class="checkbox-label">
-            <input 
-              type="checkbox" 
-              v-model="formData.categories" 
-              value="game"
-            >
-            게임
-          </label>
+  <div class="subscribe-banner">
+    <router-link to="/subscribe" class="subscribe-btn">구독하기</router-link>
+  </div>
+  <div class="newsletter-list">
+    <div
+      v-for="(preview, idx) in newsletterPreviews.slice().reverse()"
+      :key="idx"
+      class="newsletter-card"
+      @click="goToDetail(idx)"
+    >
+      <div class="thumbnail-wrapper">
+        <img
+          class="thumbnail"
+          src="http://localhost:9000/media/2025-5-4/0.png"
+          alt="썸네일"
+        />
+        <div class="preview-slide">
+          <p>{{ preview.text.slice(0, 50) }}...</p>
         </div>
         <span v-if="errors.categories" class="error-message">{{ errors.categories }}</span>
       </div>
-
-      <button type="submit" class="submit-btn" :disabled="isSubmitting">
-        {{ isSubmitting ? '처리중...' : '구독하기' }}
-      </button>
-    </form>
+      <div class="card-content">
+        <h3>{{ preview.date || '최신 뉴스레터' }}</h3>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -218,8 +179,7 @@ input[type="text"]:focus {
 .checkbox-label {
   display: flex;
   align-items: center;
-  gap: 8px;
-  cursor: pointer;
+  padding: 20px;
 }
 
 .error-message {
@@ -247,5 +207,17 @@ input[type="text"]:focus {
 .submit-btn:disabled {
   background: #a8d5c3;
   cursor: not-allowed;
+}
+
+.card-content h2 {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 8px;
+}
+
+.card-content h3 {
+  font-size: 18px;
+  color: #333;
+  margin: 0;
 }
 </style> 
