@@ -39,10 +39,10 @@ class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gener
         req = ""
         for val in category_dict.values():
             req += val
-        mod_request = request
-        mod_request.data['categories'] = req
+        mod_request = request.POST.copy()
+        mod_request['categories'] = req
 
-        serializer = UserSerializer(data=mod_request.data)
+        serializer = UserSerializer(data=mod_request)
         # serializer = UserSerializer(data=request.data)
         
         if serializer.is_valid():
@@ -51,7 +51,7 @@ class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gener
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def list(self, request, *args, **kwargs):
-        ALLOWED_GET_IP = [
+        """ALLOWED_GET_IP = [
             '127.0.0.1',
             '172.23.0.1',
         ]
@@ -60,7 +60,7 @@ class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gener
 
         if ip_addr not in ALLOWED_GET_IP:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        
+        """
         queryset = self.get_queryset()
 
         serializer = self.get_serializer(queryset, many=True)
@@ -71,6 +71,7 @@ class DataViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     serializer_class = PostSerializer
     
     def create(self, request):
+        """
         ALLOWED_POST_IP = [
             '127.0.0.1',
             '172.23.0.1',
@@ -80,7 +81,7 @@ class DataViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
         if ip_addr not in ALLOWED_POST_IP:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-
+        """
         serializer = self.get_serializer(data=request.data)
 
         if serializer.is_valid():

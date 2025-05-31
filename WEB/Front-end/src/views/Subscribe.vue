@@ -68,7 +68,7 @@
 
 <script>
 import axios from "axios";
-let url = "http://127.0.0.1:9000/user/";
+let url = "http://203.255.81.76:24040/user/";
 
 export default {
   name: 'Subscribe',

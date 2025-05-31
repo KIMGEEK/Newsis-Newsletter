@@ -12,7 +12,7 @@
       <div class="thumbnail-wrapper">
         <img
           class="thumbnail"
-          src="http://localhost:9000/media/2025-5-4/0.png"
+          src="http://http://203.255.81.97:24040/media/2025-5-4/0.png"
           alt="썸네일"
         />
         <div class="preview-slide">
