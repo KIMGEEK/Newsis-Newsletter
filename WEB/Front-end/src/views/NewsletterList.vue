@@ -16,7 +16,7 @@ export default {
     <div v-else-if="error">{{ error }}</div>
     <template v-else>
       <div
-        v-for="(preview, idx) in newsletterPreviews.slice().reverse()"
+        v-for="(preview) in newsletterPreviews.slice().reverse()"
         :key="preview.week"
         class="newsletter-card"
         @click="goToDetail(preview.week)"

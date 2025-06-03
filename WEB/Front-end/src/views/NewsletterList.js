@@ -32,7 +32,7 @@ export default {
         console.log(newsData);
         return {
           news: week.news,
-          week: week.weeks,
+          week: this.getFormattedWeek(week.weeks),
           title: newsData.title,
           text: newsData.text,
           imageUrl: `${MEDIA_BASE_URL}${week.weeks}/${week.index}.png`
@@ -43,6 +43,10 @@ export default {
   methods: {
     goToDetail(week) {
       this.$router.push(`/newsletter/${week}`);
+    },
+    getFormattedWeek(week) {
+      const parts = week.split('-');
+      return `${parts[0]}년 ${parts[1]}월 ${parts[2]}주차`;
     }
   }
 } 
