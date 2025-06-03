@@ -1,6 +1,5 @@
 <script>
-import NewsletterList, { BASE_URL } from './NewsletterList.js'
-import axios from 'axios'
+import NewsletterList from './NewsletterList.js'
 
 export default {
   ...NewsletterList,
