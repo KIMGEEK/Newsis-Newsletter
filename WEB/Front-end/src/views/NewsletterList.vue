@@ -4,19 +4,6 @@ import axios from 'axios'
 
 export default {
   ...NewsletterList,
-  async created() {
-    try {
-      const response = await axios.get(BASE_URL);
-      console.log('API Response:', response.data);
-      this.newsletters = response.data;
-      console.log('Processed newsletters:', this.newsletters);
-      this.loading = false;
-    } catch (err) {
-      this.error = 'Failed to fetch newsletters';
-      this.loading = false;
-      console.error('Error fetching newsletters:', err);
-    }
-  }
 }
 </script>
 
@@ -27,28 +14,29 @@ export default {
   <div class="newsletter-list">
     <div v-if="loading">Loading...</div>
     <div v-else-if="error">{{ error }}</div>
-    <div
-      v-else
-      v-for="(preview, idx) in newsletterPreviews.slice().reverse()"
-      :key="preview.week"
-      class="newsletter-card"
-      @click="goToDetail(preview.week)"
-    >
-      <div class="thumbnail-wrapper">
-        <img
-          class="thumbnail"
-          :src="preview.imageUrl"
-          :alt="preview.title"
-        />
-        <div class="preview-slide">
-          <p>{{ preview.text.slice(0, 50) }}...</p>
+    <template v-else>
+      <div
+        v-for="(preview, idx) in newsletterPreviews.slice().reverse()"
+        :key="preview.week"
+        class="newsletter-card"
+        @click="goToDetail(preview.week)"
+      >
+        <div class="thumbnail-wrapper">
+          <img
+            class="thumbnail"
+            :src="preview.imageUrl"
+            :alt="preview.title"
+          />
+          <div class="preview-slide">
+            <p>{{ preview.text.slice(0, 50) }}...</p>
+          </div>
+        </div>
+        <div class="card-content">
+          <h2>{{ preview.week }}</h2>
+          <h3>{{ preview.title }}</h3>
         </div>
       </div>
-      <div class="card-content">
-        <h2>{{ preview.week }}</h2>
-        <h3>{{ preview.title }}</h3>
-      </div>
-    </div>
+    </template>
   </div>
 </template>
 

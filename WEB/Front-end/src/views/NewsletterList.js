@@ -14,9 +14,11 @@ export default {
   },
   async created() {
     try {
-      const response = await axios.get(BASE_URL);
-      this.newsletters = response.data;
-      this.loading = false;
+      await axios.get(BASE_URL).then(response => {
+        this.newsletters = response.data;
+        this.loading = false;
+        console.log('Processed newsletters:', this.newsletters);
+      });
     } catch (err) {
       this.error = 'Failed to fetch newsletters';
       this.loading = false;
@@ -25,11 +27,17 @@ export default {
   },
   computed: {
     newsletterPreviews() {
-      return this.newsletters.map(week => ({
-        ...week.news[0],
-        week: week.weeks,
-        imageUrl: `${MEDIA_BASE_URL}${week.weeks}/${week.index}.png`
-      }));
+      return this.newsletters.map(week => {
+        const newsData = JSON.parse(week.news.replace(/'/g, '"'));
+        console.log(newsData);
+        return {
+          news: week.news,
+          week: week.weeks,
+          title: newsData.title,
+          text: newsData.text,
+          imageUrl: `${MEDIA_BASE_URL}${week.weeks}/${week.index}.png`
+        };
+      });
     }
   },
   methods: {
