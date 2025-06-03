@@ -27,29 +27,6 @@ class PostViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
 class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-
-    def create(self, request):
-        category_arr = request.data['categories']
-        
-        category_dict = {'web': '0', 'ai': '0', 'game': '0'}
-        
-        for category in category_arr:
-            category_dict[category] = '1'
-        
-        req = ""
-        for val in category_dict.values():
-            req += val
-        mod_request = request.POST.copy()
-        mod_request['categories'] = req
-
-        serializer = UserSerializer(data=mod_request)
-        # serializer = UserSerializer(data=request.data)
-        
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
     def list(self, request, *args, **kwargs):
         """ALLOWED_GET_IP = [
             '127.0.0.1',
