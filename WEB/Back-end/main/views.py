@@ -17,7 +17,7 @@ class PostViewSet(viewsets.ModelViewSet):
 class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-
+"""
     def create(self, request):
         category_arr = request.data['categories']
         
@@ -39,7 +39,7 @@ class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gener
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+"""
 class DataViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer

@@ -27,37 +27,6 @@
         >
         <span v-if="errors.name" class="error-message">{{ errors.name }}</span>
       </div>
-      
-      <!--<div class="form-group">
-        <label>구독 카테고리</label>
-        <div class="checkbox-group">
-          <label class="checkbox-label">
-            <input 
-              type="checkbox" 
-              v-model="formData.categories" 
-              value="web"
-            >
-            웹
-          </label>
-          <label class="checkbox-label">
-            <input 
-              type="checkbox" 
-              v-model="formData.categories" 
-              value="ai"
-            >
-            AI
-          </label>
-          <label class="checkbox-label">
-            <input 
-              type="checkbox" 
-              v-model="formData.categories" 
-              value="game"
-            >
-            게임
-          </label> 
-        </div>
-        <span v-if="errors.categories" class="error-message">{{ errors.categories }}</span>
-      </div>-->
 
       <button type="submit" class="submit-btn" :disabled="isSubmitting">
         {{ isSubmitting ? '처리중...' : '구독하기' }}
@@ -68,7 +37,7 @@
 
 <script>
 import axios from "axios";
-let url = "http://127.0.0.1:9000/user/";
+let url = "http://127.0.0.1:8000/user/";
 
 export default {
   name: 'Subscribe',
@@ -77,12 +46,10 @@ export default {
       formData: {
         email: '',
         name: '',
-        categories: []
       },
       errors: {
         email: '',
         name: '',
-        categories: ''
       },
       isSubmitting: false
     }
@@ -107,22 +74,13 @@ export default {
         this.errors.name = ''
       }
     },
-    validateCategories() {
-      if (this.formData.categories.length === 0) {
-        this.errors.categories = '최소 하나의 카테고리를 선택해주세요.'
-        return false
-      }
-      this.errors.categories = ''
-      return true
-    },
     async handleSubmit() {
       try {
         // 입력값 검증
         this.validateEmail()
         this.validateName()
-        const isCategoriesValid = this.validateCategories()
 
-        if (this.errors.email || this.errors.name || !isCategoriesValid) {
+        if (this.errors.email || this.errors.name) {
           return
         }
 
