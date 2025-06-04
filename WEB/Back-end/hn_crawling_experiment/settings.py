@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
         'http://localhost:24039',
         'http://127.0.0.1:24039',
@@ -117,6 +117,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
 LOGIN_REDIRECT_URL = '/'
 
 REST_FRAMEWORK = {
@@ -164,4 +165,5 @@ MEDIA_URL = '/media/'
 CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:9000",
     "http://localhost:9000",
+    "http://cats.chungbuk.ac.kr:24040"
 ]

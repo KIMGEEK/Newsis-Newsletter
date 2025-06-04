@@ -18,7 +18,7 @@ import base64
 
 def find_week():
     firstday = today.replace(day=1) # 5
-    while firstday.weekday() != 0: # 6
+    while firstday.weekday() != 6: # 6
       firstday += timedelta(days=1)
       
     if today < firstday: # 7
@@ -202,7 +202,7 @@ for i in range(0, 4):
             png.write(image_data)
 
 obj = []
-with open(DATA_DIR+DIR_NAME+"temp.json", "r+") as fp:
+with open(DATA_DIR+DIR_NAME+"news.json", "r+") as fp:
     obj = json.load(fp)
 data = {}
 
