@@ -32,7 +32,7 @@ export default {
         console.log(newsData);
         return {
           news: week.news,
-          week: this.getFormattedWeek(week.weeks),
+          week: week.weeks,
           title: newsData.title,
           text: newsData.text,
           imageUrl: `${MEDIA_BASE_URL}${week.weeks}/${week.index}.png`
