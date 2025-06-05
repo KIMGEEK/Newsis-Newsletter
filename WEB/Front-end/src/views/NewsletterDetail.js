@@ -1,4 +1,4 @@
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import axios from 'axios';
 import { BASE_URL, MEDIA_BASE_URL } from './NewsletterList.js';
 
@@ -15,12 +15,12 @@ const NewsletterImage = {
     <div class="image-zoom-wrapper">
       <img
         class="detail-image"
-        :src="'/src/assets/' + imageSrc"
-        :alt="'뉴스레터 이미지: ' + imageSrc"
+        :src="imageSrc"
+        :alt="'뉴스레터 이미지'"
         @error="handleImageError"
         @load="handleImageLoad"
       />
-      <p v-if="imageError" class="image-error">이미지를 불러올 수 없습니다: {{ imageSrc }}</p>
+      <p v-if="imageError" class="image-error">이미지를 불러올 수 없습니다</p>
     </div>
   `,
   data() {
@@ -69,13 +69,39 @@ export default {
   },
   props: ['id'],
   setup(props) {
-    const allNewsletters = [newsletters, newsletters2]
-    const currentNewsletter = computed(() => {
-      return allNewsletters[Number(props.id)]
-    })
+    const newsletters = ref([]);
+    const loading = ref(true);
+    const error = ref(null);
 
-    return { 
-      currentNewsletter
+    const fetchNewsletter = async () => {
+      try {
+        loading.value = true;
+        const response = await axios.get(`${BASE_URL}?weeks=${props.id}`);
+        newsletters.value = response.data.map(item => {
+          const newsData = JSON.parse(item.news.replace(/'/g, '"'));
+          // 항상 이미지 URL을 생성
+          const imageUrl = `${MEDIA_BASE_URL}${item.weeks}/${item.index}.png`;
+          return {
+            ...newsData,
+            image: imageUrl
+          };
+        });
+        loading.value = false;
+      } catch (err) {
+        error.value = '뉴스레터를 불러오는데 실패했습니다';
+        loading.value = false;
+        console.error('Error fetching newsletter:', err);
+      }
+    };
+
+    onMounted(() => {
+      fetchNewsletter();
+    });
+
+    return {
+      newsletters,
+      loading,
+      error
     }
   }
 } 

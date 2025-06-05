@@ -8,17 +8,29 @@ export default NewsletterDetail
     <!-- 상단 네비게이션 -->
     <router-link to="/" class="back-link">← 목록으로</router-link>
 
+    <!-- 로딩 상태 -->
+    <div v-if="loading" class="loading-state">
+      뉴스레터를 불러오는 중...
+    </div>
+
+    <!-- 에러 상태 -->
+    <div v-else-if="error" class="error-state">
+      {{ error }}
+    </div>
+
     <!-- 뉴스레터 내용 -->
-    <section v-for="(item, idx) in currentNewsletter" :key="idx" class="newsletter-item">
-      <h1>{{ item.date || '최신 뉴스레터' }}</h1>
-      <NewsletterImage 
-        :image-src="item.image"
-      />
-      <h2 class="title">{{ item.title }}</h2>
-      <div class="content">{{ item.text }}</div>
-      <ReferenceLinks v-if="item.reference" :links="item.reference" />
-      <hr v-if="idx < currentNewsletter.length - 1" />
-    </section>
+    <template v-else>
+      <section v-for="(item, idx) in newsletters" :key="idx" class="newsletter-item">
+        <h1>{{ item.title }}</h1>
+        <NewsletterImage 
+          v-if="item.image"
+          :image-src="item.image"
+        />
+        <div class="content">{{ item.text }}</div>
+        <ReferenceLinks v-if="item.reference" :links="item.reference" />
+        <hr v-if="idx < newsletters.length - 1" />
+      </section>
+    </template>
 
     <!-- 구독 섹션 -->
     <section class="subscribe-section">
@@ -45,6 +57,19 @@ export default NewsletterDetail
 
 .newsletter-item {
   margin-bottom: 48px;
+}
+
+/* 로딩 및 에러 상태 */
+.loading-state,
+.error-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 18px;
+}
+
+.error-state {
+  color: #e55;
 }
 
 /* 이미지 스타일 */
