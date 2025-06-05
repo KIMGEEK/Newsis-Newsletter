@@ -28,7 +28,7 @@ class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gener
     serializer_class = UserSerializer
     queryset = User.objects.all()
     def list(self, request, *args, **kwargs):
-        """ALLOWED_GET_IP = [
+        ALLOWED_GET_IP = [
             '127.0.0.1',
             '172.23.0.1',
         ]
@@ -37,7 +37,6 @@ class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gener
 
         if ip_addr not in ALLOWED_GET_IP:
             return Response(status=status.HTTP_400_BAD_REQUEST)
-        """
         queryset = self.get_queryset()
 
         serializer = self.get_serializer(queryset, many=True)
