@@ -1,19 +1,36 @@
+<script>
+import NewsletterDetail from './NewsletterDetail.js'
+export default NewsletterDetail
+</script>
+
 <template>
   <div class="newsletter-detail">
     <!-- 상단 네비게이션 -->
     <router-link to="/" class="back-link">← 목록으로</router-link>
 
+    <!-- 로딩 상태 -->
+    <div v-if="loading" class="loading-state">
+      뉴스레터를 불러오는 중...
+    </div>
+
+    <!-- 에러 상태 -->
+    <div v-else-if="error" class="error-state">
+      {{ error }}
+    </div>
+
     <!-- 뉴스레터 내용 -->
-    <section v-for="(item, idx) in currentNewsletter" :key="idx" class="newsletter-item">
-      <h1>{{ item.date || '최신 뉴스레터' }}</h1>
-      <NewsletterImage 
-        :image-src="item.image"
-      />
-      <h2 class="title">{{ item.title }}</h2>
-      <div class="content">{{ item.text }}</div>
-      <ReferenceLinks v-if="item.reference" :links="item.reference" />
-      <hr v-if="idx < currentNewsletter.length - 1" />
-    </section>
+    <template v-else>
+      <section v-for="(item, idx) in newsletters" :key="idx" class="newsletter-item">
+        <h1>{{ item.title }}</h1>
+        <NewsletterImage 
+          v-if="item.image"
+          :image-src="item.image"
+        />
+        <div class="content">{{ item.text }}</div>
+        <ReferenceLinks v-if="item.reference" :links="item.reference" />
+        <hr v-if="idx < newsletters.length - 1" />
+      </section>
+    </template>
 
     <!-- 구독 섹션 -->
     <section class="subscribe-section">
@@ -25,90 +42,6 @@
     <router-link to="/" class="back-link">← 목록으로</router-link>
   </div>
 </template>
-
-<script>
-import { computed } from 'vue'
-import newsletters from '../assets/프론트엔드.json'
-import newsletters2 from '../assets/프론트엔드 copy.json'
-
-// 이미지 컴포넌트
-const NewsletterImage = {
-  name: 'NewsletterImage',
-  props: {
-    imageSrc: {
-      type: String,
-      required: true
-    }
-  },
-  template: `
-    <div class="image-zoom-wrapper">
-      <img
-        class="detail-image"
-        :src="'/src/assets/' + imageSrc"
-        :alt="'뉴스레터 이미지: ' + imageSrc"
-        @error="handleImageError"
-        @load="handleImageLoad"
-      />
-      <p v-if="imageError" class="image-error">이미지를 불러올 수 없습니다: {{ imageSrc }}</p>
-    </div>
-  `,
-  data() {
-    return {
-      imageError: false
-    }
-  },
-  methods: {
-    handleImageError(e) {
-      console.error('이미지 로드 실패:', this.imageSrc);
-      this.imageError = true;
-    },
-    handleImageLoad() {
-      console.log('이미지 로드 성공:', this.imageSrc);
-      this.imageError = false;
-    }
-  }
-}
-
-// 참고 링크 컴포넌트
-const ReferenceLinks = {
-  name: 'ReferenceLinks',
-  props: {
-    links: {
-      type: Array,
-      required: true
-    }
-  },
-  template: `
-    <div class="reference-list">
-      <h3>참고 링크</h3>
-      <ul>
-        <li v-for="(link, i) in links" :key="i">
-          <a :href="link" target="_blank">{{ link }}</a>
-        </li>
-      </ul>
-    </div>
-  `
-}
-
-export default {
-  name: 'NewsletterDetail',
-  components: {
-    NewsletterImage,
-    ReferenceLinks
-  },
-  props: ['id'],
-  setup(props) {
-    const allNewsletters = [newsletters, newsletters2]
-    const currentNewsletter = computed(() => {
-      return allNewsletters[Number(props.id)]
-    })
-
-    return { 
-      currentNewsletter
-    }
-  }
-}
-</script>
 
 <style scoped>
 /* 전체 레이아웃 */
@@ -124,6 +57,19 @@ export default {
 
 .newsletter-item {
   margin-bottom: 48px;
+}
+
+/* 로딩 및 에러 상태 */
+.loading-state,
+.error-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 18px;
+}
+
+.error-state {
+  color: #e55;
 }
 
 /* 이미지 스타일 */
