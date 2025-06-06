@@ -8,14 +8,9 @@ class Post(models.Model):
     news = models.TextField() # {"date": "2025-05-24", "postname": "Hello world Title", "contents": "Hello world Content"}
     image = models.TextField() # '7JWI64WVpw=='
 
-    # postname = models.CharField(max_length=50)
-    # mainphoto = models.ImageField(blank=True, null=True)
-    # contents = models.TextField()
-
     def __str__(self):
         return self.weeks
 
 class User(models.Model):
     email = models.EmailField()
     name = models.CharField(max_length=30)
-    categories = models.CharField(max_length=10, default="000") # back-front-ai, 000 ~ 111
