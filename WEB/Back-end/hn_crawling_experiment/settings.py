@@ -55,6 +55,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+SECURE_REFERRER_POLICY = 'no-referrer' # referrer policy 설정 해제
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'None' # COOP 설정 해제
+
+
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = (
         'http://localhost:24039',
