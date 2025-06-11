@@ -28,12 +28,17 @@ class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gener
     serializer_class = UserSerializer
     queryset = User.objects.all()
     def list(self, request, *args, **kwargs):
-        ALLOWED_GET_IP = [
-            '127.0.0.1',
-            '172.23.0.1',
-        ]
+        ip_addr = request.META.get('HTTP_X_FORWARDED_FOR')
+        if ip_addr:
+            ip_addr = ip_addr.split(',')[0]  # 첫 번째 IP가 실제 클라이언트 IP
+        else:
+            ip_addr = request.META.get('REMOTE_ADDR')
+        print("Client IP:", ip_addr)
 
-        ip_addr = request.META['REMOTE_ADDR']
+        ALLOWED_GET_IP = [
+        '127.0.0.1',
+        '172.23.0.1',
+        ]
 
         if ip_addr not in ALLOWED_GET_IP:
             return Response(status=status.HTTP_400_BAD_REQUEST)
