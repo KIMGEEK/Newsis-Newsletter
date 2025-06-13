@@ -50,22 +50,3 @@ class UserViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gener
 class DataViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
-    
-    def create(self, request):
-        """
-        ALLOWED_POST_IP = [
-            '127.0.0.1',
-            '172.23.0.1',
-        ]
-
-        ip_addr = request.META['REMOTE_ADDR']
-
-        if ip_addr not in ALLOWED_POST_IP:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-        """
-        serializer = self.get_serializer(data=request.data)
-
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
